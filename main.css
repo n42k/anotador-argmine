@@ -1,0 +1,70 @@
+html, body, body > div, body > div > div, canvas {
+	padding: 0px;
+	margin: 0px;
+	height: 100%;
+}
+
+header {
+	width: 100%;
+	margin: 0px;
+	box-sizing: border-box;
+	border-bottom: 1px solid black;
+}
+
+header > h2 {
+	float: left;
+	padding: 5px;
+	margin: 0px;
+}
+
+header > ul {
+	list-style-type: none;
+	padding: 0px;
+	margin: 0px;
+}
+
+header > ul > li {
+	float: right;
+}
+
+header > ul > li > a {
+	display: block;
+	width: 60px;
+	padding: 10px;
+	text-align: center;
+	text-decoration: none;
+	color: black;
+}
+
+header > ul > li > a:hover {
+	background-color: #ccc;
+}
+
+body > div, body > div > div {
+	display: flex;
+}
+
+body > div {
+	flex-direction: column;
+}
+
+body > div > div {
+	flex: 1;
+}
+
+#frame {
+	border: 0px solid;
+	width: 50%;
+	border-right: 1px solid black;
+	height: 100%;
+	padding: 10px;
+	box-sizing: border-box;
+}
+
+#frame > h1 {
+	margin-top: 0px;
+}
+
+canvas {
+	width: 100%;
+}
