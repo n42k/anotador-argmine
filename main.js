@@ -228,3 +228,14 @@ function onErase() {
 	onDraw();
 	hideContextMenu();
 }
+
+function onEdit() {
+	hideContextMenu();
+	
+	var newText = prompt('Editar:', held.text);
+	if(newText == null)
+		return;
+
+	held.setText(newText);
+	onDraw();
+}

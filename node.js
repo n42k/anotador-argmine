@@ -2,16 +2,7 @@ function Node(x, y, text, type) {
 	this.x = x;
 	this.y = y;
 
-	this.text = text;
-	this.lines = this._makeLines(text);
-
-	this.width = 20;
-	for(var i = 0; i < this.lines.length; ++i) {
-		var length = ctx.measureText(this.lines[i]).width + 20;
-		if(length > this.width)
-			this.width = length;
-	}
-	this.height = this.lines.length * 20 + 20;
+	this.setText(text);
 
 	this.id = Node.nextId++;
 
@@ -134,4 +125,17 @@ Node.prototype.getCenterX = function() {
 
 Node.prototype.getCenterY = function() {
 	return this.y + this.height/2;
+}
+
+Node.prototype.setText = function(text) {
+	this.text = text;
+	this.lines = this._makeLines(text);
+
+	this.width = 20;
+	for(var i = 0; i < this.lines.length; ++i) {
+		var length = ctx.measureText(this.lines[i]).width + 20;
+		if(length > this.width)
+			this.width = length;
+	}
+	this.height = this.lines.length * 20 + 20;
 }
