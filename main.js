@@ -7,7 +7,7 @@ var heldOffsetY = 0;
 var dragging = false;
 
 function getNodeAt(x, y) {
-	for(var i = 0; i < nodes.length; ++i)
+	for(var i = nodes.length - 1; i != -1; --i)
 		if(nodes[i].isInside(x, y))
 			return nodes[i];
 	return null;
