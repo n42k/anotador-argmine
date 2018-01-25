@@ -50,11 +50,12 @@ body > div {
 
 body > div > div {
 	flex: 1;
+	overflow: hidden;
 }
 
 #frame {
 	border: 0px solid;
-	width: 50%;
+	min-width: 34%;
 	border-right: 1px solid black;
 	height: 100%;
 	padding: 10px;
@@ -66,5 +67,5 @@ body > div > div {
 }
 
 canvas {
-	width: 100%;
+	min-width: 66%;
 }

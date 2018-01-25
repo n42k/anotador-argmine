@@ -35,13 +35,14 @@ function getSelected() {
 }
 
 function init() {
-	canvas.addEventListener('mouseup', function() {
+	canvas.addEventListener('mouseup', function(event) {
 		onRelease(event.offsetX, event.offsetY, event.shiftKey);
 	});
-	canvas.addEventListener('mousedown', function() {
+	canvas.addEventListener('mousedown', function(event) {
 		onPress(event.offsetX, event.offsetY, event.shiftKey);
+		window.getSelection().removeAllRanges();
 	});
-	canvas.addEventListener('mousemove', function() {
+	canvas.addEventListener('mousemove', function(event) {
 		onMove(event.offsetX, event.offsetY, event.shiftKey);
 	});
 	window.addEventListener('resize', resizeCanvas);
