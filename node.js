@@ -6,44 +6,43 @@ function Node(x, y, text, type) {
 
 	this.id = Node.nextId++;
 
-	this.type = type;
-	switch(type) {
-		case 'I':
-			this.fillColor = Node.NORMAL_FILL_COLOR;
-			this.borderColor = Node.NORMAL_BORDER_COLOR;
-			this.color = 'b';
-			break;
-		case 'RA':
-			this.fillColor = Node.INFERENCE_FILL_COLOR;
-			this.borderColor = Node.INFERENCE_BORDER_COLOR;
-			this.color = 'g';
-			break;
-		default:
-			console.log('Unknown node type');
-	}
+	this.setType(type);
 
 	this.textColor = '#000';
+	this.focused = false;
 }
 
 Node.MAX_WIDTH = 200;
 
-Node.NORMAL_FILL_COLOR = '#ddeef9';
-Node.NORMAL_BORDER_COLOR = '#89c3ea';
-Node.NORMAL_BORDER_FOCUS_COLOR = '#3498db';
-
-Node.INFERENCE_FILL_COLOR = '#def8e9';
-Node.INFERENCE_BORDER_COLOR = '#86e2ad';
-Node.INFERENCE_BORDER_FOCUS_COLOR = '#2ecc71';
+Node.COLORS = {
+	b: {
+		fill: '#ddeef9',
+		border: '#89c3ea',
+		border_focus: '#3498db'
+	},
+	g: {
+		fill: '#def8e9',
+		border: '#86e2ad',
+		border_focus: '#2ecc71'
+	},
+	r: {
+		fill: '#fbdedb',
+		border: '#f1958b',
+		border_focus: '#e74c3c'
+	}
+};
 
 Node.EPSILON = 0.001;
 
 Node.nextId = 0;
 
 Node.prototype.draw = function() {
-	ctx.fillStyle = this.borderColor;
+	var color = Node.COLORS[this.color];
+
+	ctx.fillStyle = this.focused ? color.border_focus : color.border;
 	ctx.fillRect(this.x, this.y, this.width, this.height);
 
-	ctx.fillStyle = this.fillColor;
+	ctx.fillStyle = color.fill;
 	ctx.fillRect(this.x + 2, this.y + 2, this.width - 4, this.height - 4);
 
 	ctx.fillStyle = this.textColor;
@@ -87,26 +86,12 @@ Node.prototype._makeLines = function(text) {
 
 Node.prototype.hold = function() {
 	held = this;
-	switch(this.type) {
-		case 'I':
-			this.borderColor = Node.NORMAL_BORDER_FOCUS_COLOR;
-			break;
-		case 'RA':
-			this.borderColor = Node.INFERENCE_BORDER_FOCUS_COLOR;
-			break;
-	}
+	this.focused = true;
 }
 
 Node.prototype.release = function() {
 	held = null;
-	switch(this.type) {
-		case 'I':
-			this.borderColor = Node.NORMAL_BORDER_COLOR;
-			break;
-		case 'RA':
-			this.borderColor = Node.INFERENCE_BORDER_COLOR;
-			break;
-	}
+	this.focused = false;
 }
 
 Node.prototype.isInside = function(x, y) {
@@ -139,4 +124,15 @@ Node.prototype.setText = function(text) {
 	}
 	this.width = Math.ceil(this.width);
 	this.height = this.lines.length * 20 + 20;
+}
+
+Node.prototype.setType = function(type) {
+	this.type = type;
+	switch(type) {
+		case 'I': this.color = 'b'; break;
+		case 'RA': this.color = 'g'; break;
+		case 'CA': this.color = 'r'; break;
+		default:
+			console.log('Unknown node type');
+	}
 }

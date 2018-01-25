@@ -252,6 +252,15 @@ function onEdit() {
 }
 
 function onEditInference(type) {
+	switch(type) {
+		case 'Default Inference':
+			held.setType('RA');
+			break;
+		case 'Default Conflict':
+			held.setType('CA');
+			break;
+	}
+
 	held.setText(type);
 	hideModal();
 	onDraw();
