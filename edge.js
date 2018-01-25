@@ -11,6 +11,9 @@ Edge.prototype.setEndXY = function(x, y) {
 }
 
 Edge.prototype.setEnd = function(node) {
+	if(this.start == node)
+		throw "Edge can't have equal start and end nodes.";
+
 	this.end = node;
 }
 

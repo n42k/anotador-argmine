@@ -17,7 +17,14 @@ function addPermanentEdge(node) {
 	if(held == null || !(held instanceof Edge) || node == null)
 		return false;
 
-	held.setEnd(node);
+	try {
+		held.setEnd(node);
+	} catch(e) {
+		held.release();
+		onDraw();
+		return true;
+	}
+
 	var middleX = (held.start.x + held.end.x)/2;
 	var middleY = (held.start.y + held.end.y)/2;
 	var inference = new Node(middleX, middleY, 'Default Inference', 'RA');
