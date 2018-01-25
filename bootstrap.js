@@ -1,4 +1,5 @@
 var frame = document.getElementById('frame');
+var contextMenu = document.getElementById('contextmenu');
 var canvas = document.getElementById('canvas');
 var ctx = canvas.getContext('2d');
 
@@ -36,14 +37,24 @@ function getSelected() {
 
 function init() {
 	canvas.addEventListener('mouseup', function(event) {
-		onRelease(event.offsetX, event.offsetY, event.shiftKey);
+		if(event.which == 1) // if left mouse button was pressed
+			onRelease(event.offsetX, event.offsetY, event.shiftKey);
 	});
 	canvas.addEventListener('mousedown', function(event) {
+		// ignore non-left button presses
+		if(event.which != 1)
+			return;
+
 		onPress(event.offsetX, event.offsetY, event.shiftKey);
 		window.getSelection().removeAllRanges();
 	});
 	canvas.addEventListener('mousemove', function(event) {
-		onMove(event.offsetX, event.offsetY, event.shiftKey);
+		if(contextMenu.style.display == 'none')
+			onMove(event.offsetX, event.offsetY, event.shiftKey);
+	});
+	canvas.addEventListener('contextmenu', function(event) {
+		event.preventDefault();
+		onRightClick(event.offsetX, event.offsetY, event.shiftKey);
 	});
 	window.addEventListener('resize', resizeCanvas);
 }

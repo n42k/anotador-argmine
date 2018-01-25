@@ -35,6 +35,29 @@ function addPermanentEdge(node) {
 	return true;
 }
 
+function showContextMenu(x, y) {
+	contextMenu.style.display = 'block';
+	contextMenu.style.left = x + 'px';
+	contextMenu.style.top = y + 'px';
+}
+
+function hideContextMenu() {
+	contextMenu.style.display = 'none';
+}
+
+function deleteNode(node) {
+	// remove node
+	var i = nodes.indexOf(node);
+	if(i == -1)
+		return;
+
+	nodes.splice(i, 1);
+
+	for(var i = 0; i < edges.length; ++i)
+		if(edges[i].start == node || edges[i].end == node)
+			edges.splice(i--, 1);
+}
+
 function onDraw() {
 	canvas.width = canvas.width;
 	for(var i = 0; i < edges.length; ++i)
@@ -44,6 +67,8 @@ function onDraw() {
 }
 
 function onPress(x, y, shift) {
+	hideContextMenu();
+
 	var node = getNodeAt(x, y);
 	if(addPermanentEdge(node))
 		return;
@@ -121,6 +146,20 @@ function onMove(x, y, shift) {
 	onDraw();
 }
 
+function onRightClick(x, y, shift) {
+	var node = getNodeAt(x, y);
+
+	if(node == null)
+		return;
+
+	if(held)
+		held.release();
+
+	node.hold();
+	onDraw();
+	showContextMenu(x, y);
+}
+
 function onSave() {
 	var jnodes = {};
 
@@ -159,4 +198,33 @@ function onSave() {
 	}
 
 	prompt('JSON:', JSON.stringify(json));
+}
+
+function onErase() {
+	deleteNode(held);
+
+	do {
+		var modified = 0;
+		for(var i = 0; i < nodes.length; ++i) {
+			if(nodes[i].type != 'RA')
+				continue;
+
+			var foundStart = false;
+			var foundEnd = false;
+			for(var j = 0; j < edges.length; ++j) {
+				if(edges[j].start == nodes[i])
+					foundStart = true;
+				else if(edges[j].end == nodes[i])
+					foundEnd = true;
+			}
+
+			if(!foundStart || !foundEnd) {
+				deleteNode(nodes[i--]);
+				modified++;
+			}
+		}
+	} while(modified > 0);
+
+	onDraw();
+	hideContextMenu();
 }

@@ -1,4 +1,4 @@
-html, body, body > div, body > div > div, canvas {
+html, body, body > div, body > div > div, #canvas-frame {
 	padding: 0px;
 	margin: 0px;
 	height: 100%;
@@ -17,7 +17,7 @@ header > h2 {
 	margin: 0px;
 }
 
-header > ul {
+ul {
 	list-style-type: none;
 	padding: 0px;
 	margin: 0px;
@@ -66,6 +66,32 @@ body > div > div {
 	margin-top: 0px;
 }
 
-canvas {
+#canvas-frame {
+	position: relative;
 	min-width: 66%;
+}
+
+canvas {
+	width: 100%;
+	height: 100%;
+}
+
+#contextmenu {
+	position: absolute;
+	display: none;
+	border: 1px solid black;
+	background-color: #eee;
+}
+
+#contextmenu > ul > li > a {
+	display: block;
+	width: 60px;
+	padding: 5px;
+	text-align: center;
+	text-decoration: none;
+	color: black;
+}
+
+#contextmenu > ul > li > a:hover {
+	background-color: #ccc;
 }
