@@ -25,6 +25,12 @@ function addPermanentEdge(node) {
 		return true;
 	}
 
+	if(held.start.type == 'I' && held.end.type != 'I') {
+		held = null;
+		onDraw();
+		return true;
+	}
+
 	var middleX = (held.start.x + held.end.x)/2;
 	var middleY = (held.start.y + held.end.y)/2;
 	var inference = new Node(middleX, middleY, 'Default Inference', 'RA');
