@@ -239,10 +239,20 @@ function onErase() {
 function onEdit() {
 	hideContextMenu();
 	
-	var newText = prompt('Editar:', held.text);
-	if(newText == null)
-		return;
+	if(held.type == 'I')
+		showEditNode(held.text);
+	else
+		showEditInference(held.text);
+}
 
-	held.setText(newText);
+function onEditInference(type) {
+	held.setText(type);
+	hideModal();
+	onDraw();
+}
+
+function onEditNode(text) {
+	held.setText(text);
+	hideModal();
 	onDraw();
 }

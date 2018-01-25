@@ -5,11 +5,11 @@
 		<link rel="stylesheet" href="main.css">
 	</head>
 	<body>
-		<div>
+		<div id="wrapper1">
 			<header><h2>Anotador ArgMine</h2><ul>
 				<li><a href="#" onclick="onSave()">Gravar</a></li>
 			</ul></header>
-			<div>
+			<div id="wrapper2">
 				<div id="frame"></div>
 				<div id="canvas-frame">
 					<canvas id="canvas"></canvas>
@@ -19,6 +19,29 @@
 							<li><a href="#" onclick="onErase()">Apagar</a></li>
 						</ul>
 					</div>
+				</div>
+			</div>
+		</div>
+		<div id="fullscreen-hider">
+			<div id="edit-node">
+				<header>Editar Proposição</header>
+				<div>
+					<label>Texto: <br>
+						<textarea id="nodeText"></textarea>
+					</label>
+					<input type="button" value="Cancelar" onclick="bCancel()">
+					<input type="button" value="Editar" onclick="bEditNode()">
+				</div>
+			</div>
+			<div id="edit-inference">
+				<header>Editar Inferência</header>
+				<div>
+					<label>Tipo: <select id="inferenceType">
+						<option value="Default Inference">Default Inference</option>
+						<option value="Default Conflict">Default Conflict</option>
+					</select></label>
+					<input type="button" value="Cancelar" onclick="bCancel()">
+					<input type="button" value="Editar" onclick="bEditInference()">
 				</div>
 			</div>
 		</div>

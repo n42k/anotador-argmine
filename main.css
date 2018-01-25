@@ -1,4 +1,4 @@
-html, body, body > div, body > div > div, #canvas-frame {
+html, body, #wrapper1, #wrapper2, #canvas-frame {
 	padding: 0px;
 	margin: 0px;
 	height: 100%;
@@ -40,15 +40,15 @@ header > ul > li > a:hover {
 	background-color: #ccc;
 }
 
-body > div, body > div > div {
+#wrapper1, #wrapper2 {
 	display: flex;
 }
 
-body > div {
+#wrapper1 {
 	flex-direction: column;
 }
 
-body > div > div {
+#wrapper2 {
 	flex: 1;
 	overflow: hidden;
 }
@@ -94,4 +94,50 @@ canvas {
 
 #contextmenu > ul > li > a:hover {
 	background-color: #ccc;
+}
+
+#fullscreen-hider {
+	display: none; /* display: flex; when not hidden */
+	justify-content: center;
+	align-items: center;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	bottom: 0px;
+	right: 0px;
+	background-color: rgba(0, 0, 0, 0.8);
+}
+
+#fullscreen-hider > div {
+	width: 600px;
+}
+
+#fullscreen-hider > div > header {
+	padding: 10px;
+	border: 1px solid black;
+	border-bottom: 0px;
+	background-color: #44c;
+}
+
+#fullscreen-hider > div > div {
+	padding: 10px;
+	border: 1px solid black;
+	background-color: #fff;
+}
+
+#fullscreen-hider > div > div:after, #fullscreen-hider > div > div > label:after {
+	content: '';
+	display: block;
+	clear: both;
+}
+
+#fullscreen-hider > div > div > input[type="button"] {
+	float: right;
+}
+
+#fullscreen-hider textarea {
+	min-width: 99%;
+	max-width: 99%;
+	min-height: 200px;
+	max-height: 200px;
 }

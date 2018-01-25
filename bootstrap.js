@@ -1,5 +1,10 @@
 var frame = document.getElementById('frame');
 var contextMenu = document.getElementById('contextmenu');
+var fullscreenHider = document.getElementById('fullscreen-hider');
+
+var modalEditInference = document.getElementById('edit-inference');
+var modalEditNode = document.getElementById('edit-node');
+
 var canvas = document.getElementById('canvas');
 var ctx = canvas.getContext('2d');
 
@@ -57,4 +62,39 @@ function init() {
 		onRightClick(event.offsetX, event.offsetY, event.shiftKey);
 	});
 	window.addEventListener('resize', resizeCanvas);
+}
+
+function bEditInference() {
+	var type = document.getElementById('inferenceType').value;
+	onEditInference(type);
+}
+
+function bEditNode() {
+	var text = document.getElementById('nodeText').value.replace('\n', ' ');
+	onEditNode(text);
+}
+
+function bCancel() {
+	hideModal();
+}
+
+function showEditNode(text) {
+	document.getElementById('nodeText').value = text;
+	showModal(modalEditNode);
+}
+
+function showEditInference(type) {
+	document.getElementById('inferenceType').value = type;
+	showModal(modalEditInference);
+}
+
+function showModal(modal) {
+	modalEditNode.style.display = 'none';
+	modalEditInference.style.display = 'none';
+	modal.style.display = 'block';
+	fullscreenHider.style.display = 'flex';
+}
+
+function hideModal() {
+	fullscreenHider.style.display = 'none';
 }
