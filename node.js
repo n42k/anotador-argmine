@@ -1,6 +1,6 @@
 function Node(x, y, text, type) {
-	this.x = x;
-	this.y = y;
+	this.x = Math.round(x);
+	this.y = Math.round(y);
 
 	this.setText(text);
 
@@ -137,5 +137,6 @@ Node.prototype.setText = function(text) {
 		if(length > this.width)
 			this.width = length;
 	}
+	this.width = Math.ceil(this.width);
 	this.height = this.lines.length * 20 + 20;
 }
