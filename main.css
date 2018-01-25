@@ -9,6 +9,10 @@ header {
 	margin: 0px;
 	box-sizing: border-box;
 	border-bottom: 1px solid black;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+	-moz-user-select: none;
+	user-select: none;
 }
 
 header > h2 {
