@@ -33,22 +33,44 @@ Node.COLORS = {
 };
 
 Node.EPSILON = 0.001;
+Node.BORDER_SIZE = 2;
 
 Node.nextId = 0;
 
+Node.prototype._drawRoundRect = function(x, y, w, h, b, r) {
+	ctx.beginPath();
+	ctx.moveTo(x + b, y);
+	ctx.lineTo(x + w - b, y);
+	ctx.arcTo(x + w, y, x + w, y + b, r);
+	ctx.lineTo(x + w, y + h - b);
+	ctx.arcTo(x + w, y + h, x + w - b, y + h, r);
+	ctx.lineTo(x + b, y + h);
+	ctx.arcTo(x, y + h, x, y + h - b, r);
+	ctx.lineTo(x, y + b);
+	ctx.arcTo(x, y, x + b, y, r);
+	ctx.fill();
+}
+
 Node.prototype.draw = function() {
+	var x = this.x;
+	var y = this.y;
+	var w = this.width;
+	var h = this.height;
+	var b = Node.BORDER_SIZE;
+	var r = 4; // border radius
+
 	var color = Node.COLORS[this.color];
 
 	ctx.fillStyle = this.focused ? color.border_focus : color.border;
-	ctx.fillRect(this.x, this.y, this.width, this.height);
+	this._drawRoundRect(x, y, w, h, b, r);
 
 	ctx.fillStyle = color.fill;
-	ctx.fillRect(this.x + 2, this.y + 2, this.width - 4, this.height - 4);
+	this._drawRoundRect(x + b, y + b, w - 2 * b, h - 2 * b, b, r);
 
 	ctx.fillStyle = this.textColor;
 	ctx.textAlign = 'center';
 	for(var i = 0; i < this.lines.length; ++i) {
-		ctx.fillText(this.lines[i], this.x + this.width/2, this.y + 25 + i * 20);
+		ctx.fillText(this.lines[i], x + w/2, y + 25 + i * 20);
 	}
 }
 
@@ -116,9 +138,10 @@ Node.prototype.setText = function(text) {
 	this.text = text;
 	this.lines = this._makeLines(text);
 
-	this.width = 20;
+	var emptySize = 16 + Node.BORDER_SIZE * 2;
+	this.width = emptySize;
 	for(var i = 0; i < this.lines.length; ++i) {
-		var length = ctx.measureText(this.lines[i]).width + 20;
+		var length = ctx.measureText(this.lines[i]).width + emptySize;
 		if(length > this.width)
 			this.width = length;
 	}
