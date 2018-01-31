@@ -42,10 +42,14 @@ function getSelected() {
 
 function init() {
 	canvas.addEventListener('mouseup', function(event) {
+		event.preventDefault();
+
 		if(event.which == 1) // if left mouse button was pressed
 			onRelease(event.offsetX, event.offsetY, event.shiftKey);
 	});
 	canvas.addEventListener('mousedown', function(event) {
+		event.preventDefault();
+
 		// ignore non-left button presses
 		if(event.which != 1)
 			return;
