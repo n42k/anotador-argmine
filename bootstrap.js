@@ -40,6 +40,10 @@ function getSelected() {
 	return window.getSelection().toString();
 }
 
+function clearSelection() {
+	window.getSelection().removeAllRanges();
+}
+
 function init() {
 	canvas.addEventListener('mouseup', function(event) {
 		event.preventDefault();
@@ -64,6 +68,14 @@ function init() {
 	canvas.addEventListener('contextmenu', function(event) {
 		event.preventDefault();
 		onRightClick(event.offsetX, event.offsetY, event.shiftKey);
+	});
+	canvas.addEventListener('dragover', function(event) {
+		event.preventDefault();
+	});
+	canvas.addEventListener('drop', function(event) {
+		var text = event.dataTransfer.getData("text/plain");
+		onDragText(event.offsetX, event.offsetY, text);
+		event.preventDefault();
 	});
 	window.addEventListener('resize', resizeCanvas);
 }

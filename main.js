@@ -107,13 +107,7 @@ function onPress(x, y, shift) {
 	// if there's text selected, add a node
 	var text = getSelected();
 	if(text != '') {
-		if(held)
-			held.release();
-
-		var node = new Node(x, y, text, 'I');
-		nodes.push(node);
-		node.hold();
-		onDraw();
+		onDragText(x, y, text);
 		return;
 	}
 
@@ -269,5 +263,19 @@ function onEditInference(type) {
 function onEditNode(text) {
 	held.setText(text);
 	hideModal();
+	onDraw();
+}
+
+function onDragText(x, y, text) {
+	clearSelection();
+	if(text == '')
+		return;
+
+	if(held)
+		held.release();
+
+	var node = new Node(x, y, text, 'I');
+	nodes.push(node);
+	node.hold();
 	onDraw();
 }
