@@ -33,7 +33,7 @@ function addPermanentEdge(node) {
 
 	var middleX = (held.start.x + held.end.x)/2;
 	var middleY = (held.start.y + held.end.y)/2;
-	var inference = new Node(middleX, middleY, 'Default Inference', 'RA');
+	var inference = new InferenceNode(middleX, middleY, InferenceNode.schemes.SUPPORT);
 	nodes.push(inference);
 
 	var edge1 = new Edge(held.start);
@@ -181,12 +181,12 @@ function onSave() {
 			id: node.id,
 			x: node.x,
 			y: node.y,
-			text: node.text,
+			text: node.jsonText,
 			width: node.width,
 			height: node.height,
 			type: node.type,
 			color: node.color,
-			scheme: 72,
+			scheme: node.scheme,
 			visible: true
 		};
 
@@ -242,20 +242,19 @@ function onEdit() {
 	if(held.type == 'I')
 		showEditNode(held.text);
 	else
-		showEditInference(held.text);
+		showEditInference(held.jsonText);
 }
 
 function onEditInference(type) {
 	switch(type) {
 		case 'Default Inference':
-			held.setType('RA');
+			held.setScheme(InferenceNode.schemes.SUPPORT);
 			break;
 		case 'Default Conflict':
-			held.setType('CA');
+			held.setScheme(InferenceNode.schemes.ATTACK);
 			break;
 	}
 
-	held.setText(type);
 	hideModal();
 	onDraw();
 }

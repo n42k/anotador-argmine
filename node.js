@@ -10,6 +10,7 @@ function Node(x, y, text, type) {
 
 	this.textColor = '#000';
 	this.focused = false;
+	this.scheme = 0;
 }
 
 Node.MAX_WIDTH = 200;
@@ -136,6 +137,7 @@ Node.prototype.getCenterY = function() {
 
 Node.prototype.setText = function(text) {
 	this.text = text;
+	this.jsonText = text;
 	this.lines = this._makeLines(text);
 
 	var emptySize = 16 + Node.BORDER_SIZE * 2;
@@ -158,4 +160,36 @@ Node.prototype.setType = function(type) {
 		default:
 			console.log('Unknown node type');
 	}
+}
+
+function InferenceNode(x, y, scheme) {
+	Node.call(this, x, y, '', 'I');
+
+	this.setScheme(scheme);
+}
+
+InferenceNode.prototype = Object.create(Node.prototype);
+
+InferenceNode.prototype.setScheme = function(scheme) {
+	this.scheme = scheme;
+	switch(scheme) {
+		case InferenceNode.schemes.SUPPORT:
+			this.setType('RA');
+			this.setText('Suporte');
+			this.jsonText = 'Default Inference';
+			break;
+		case InferenceNode.schemes.ATTACK:
+			this.setType('CA');
+			this.setText('Ataque');
+			this.jsonText = 'Default Conflict';
+			break;
+		default:
+			throw "Invalid InferenceNode type";
+			break;
+	}
+}
+
+InferenceNode.schemes = {
+	SUPPORT: 72,
+	ATTACK: 71
 }
