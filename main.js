@@ -13,11 +13,21 @@ function getNodeAt(x, y) {
 	return null;
 }
 
+function getEdgeAt(x, y) {
+	for(var i = 0; i < edges.length; ++i) {
+		if(edges[i].isInside(x, y))
+			return edges[i];
+	}
+
+	return null;
+}
+
 function addPermanentEdge(node) {
 	if(held == null || !(held instanceof Edge) || node == null)
 		return false;
 
 	if(held.start.type != 'I') {
+		held.delete();
 		held.release();
 		onDraw();
 		return true;
@@ -26,6 +36,7 @@ function addPermanentEdge(node) {
 	try {
 		held.setEnd(node);
 	} catch(e) {
+		held.delete();
 		held.release();
 		onDraw();
 		return true;
@@ -49,19 +60,10 @@ function addPermanentEdge(node) {
 	edge2.setEnd(held.end);
 	edges.push(edge2);
 
+	held.delete();
 	held.release();
 	onDraw();
 	return true;
-}
-
-function showContextMenu(x, y) {
-	contextMenu.style.display = 'block';
-	contextMenu.style.left = x + 'px';
-	contextMenu.style.top = y + 'px';
-}
-
-function hideContextMenu() {
-	contextMenu.style.display = 'none';
 }
 
 function deleteNode(node) {
@@ -146,6 +148,7 @@ function onRelease(x, y, shift) {
 		var node = getNodeAt(x, y);
 		if(addPermanentEdge(node))
 			return;
+		held.delete();
 		held.release();
 		onDraw();
 	}
@@ -160,17 +163,30 @@ function onMove(x, y, shift) {
 }
 
 function onRightClick(x, y, shift) {
+	hideContextMenu();
+
 	var node = getNodeAt(x, y);
 
-	if(node == null)
+	if(node == null) {
+		var edge = getEdgeAt(x, y);
+
+		if(edge == null)
+			return;
+
+		if(held)
+			held.release();
+
+		edge.hold();
+		showEdgeContextMenu(x, y);
 		return;
+	}
 
 	if(held)
 		held.release();
 
 	node.hold();
 	onDraw();
-	showContextMenu(x, y);
+	showNodeContextMenu(x, y);
 }
 
 function onSave() {
@@ -214,7 +230,15 @@ function onSave() {
 }
 
 function onErase() {
-	deleteNode(held);
+	if(held instanceof Node)
+		deleteNode(held);
+	else if(held instanceof Edge) {
+		var i = edges.indexOf(held);
+		if(i == -1)
+			return;
+
+		edges.splice(i, 1);
+	} else throw "Unsupported held type";
 
 	do {
 		var modified = 0;

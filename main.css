@@ -80,14 +80,14 @@ canvas {
 	height: 100%;
 }
 
-#contextmenu {
+.contextmenu {
 	position: absolute;
 	display: none;
 	border: 1px solid black;
 	background-color: #eee;
 }
 
-#contextmenu > ul > li > a {
+.contextmenu > ul > li > a {
 	display: block;
 	width: 60px;
 	padding: 5px;
@@ -96,7 +96,7 @@ canvas {
 	color: black;
 }
 
-#contextmenu > ul > li > a:hover {
+.contextmenu > ul > li > a:hover {
 	background-color: #ccc;
 }
 

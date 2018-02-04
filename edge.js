@@ -117,16 +117,33 @@ Edge.prototype.draw = function() {
 	ctx.restore();
 }
 
+Edge.prototype.isInside = function(x, y) {
+	var SCx = this.start.getCenterX();
+	var SCy = this.start.getCenterY();
+	var ECx = this.end.getCenterX();
+	var ECy = this.end.getCenterY();
+
+	var dx = ECx - SCx;
+	var dy = ECy - SCy;
+
+	var p = this._lineIntersect(SCx, SCy, dx, dy, x, y, dx, -dy);
+
+	return this._distance(x, y, p.x, p.y) < 5;
+}
+
 Edge.prototype.hold = function() {
 	held = this;
 }
 
 Edge.prototype.release = function() {
+	held = null;
+}
+
+Edge.prototype.delete = function() {
 	var i = edges.indexOf(held);
 	if(i > -1)
 		edges.splice(i, 1);
 
-	held = null;
 }
 
 Edge.prototype.move = function(x, y) {

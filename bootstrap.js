@@ -1,5 +1,6 @@
 var frame = document.getElementById('frame');
-var contextMenu = document.getElementById('contextmenu');
+var nodeContextMenu = document.getElementById('contextmenu-node');
+var edgeContextMenu = document.getElementById('contextmenu-edge');
 var fullscreenHider = document.getElementById('fullscreen-hider');
 
 var modalEditInference = document.getElementById('edit-inference');
@@ -62,7 +63,7 @@ function init() {
 		window.getSelection().removeAllRanges();
 	});
 	canvas.addEventListener('mousemove', function(event) {
-		if(contextMenu.style.display == 'none')
+		if(nodeContextMenu.style.display == 'none' && edgeContextMenu.style.display == 'none')
 			onMove(event.offsetX, event.offsetY, event.shiftKey);
 	});
 	canvas.addEventListener('contextmenu', function(event) {
@@ -113,4 +114,22 @@ function showModal(modal) {
 
 function hideModal() {
 	fullscreenHider.style.display = 'none';
+}
+
+
+function showNodeContextMenu(x, y) {
+	nodeContextMenu.style.display = 'block';
+	nodeContextMenu.style.left = x + 'px';
+	nodeContextMenu.style.top = y + 'px';
+}
+
+function showEdgeContextMenu(x, y) {
+	edgeContextMenu.style.display = 'block';
+	edgeContextMenu.style.left = x + 'px';
+	edgeContextMenu.style.top = y + 'px';
+}
+
+function hideContextMenu() {
+	nodeContextMenu.style.display = 'none';
+	edgeContextMenu.style.display = 'none';
 }
