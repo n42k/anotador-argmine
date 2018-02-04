@@ -17,6 +17,12 @@ function addPermanentEdge(node) {
 	if(held == null || !(held instanceof Edge) || node == null)
 		return false;
 
+	if(held.start.type != 'I') {
+		held.release();
+		onDraw();
+		return true;
+	}
+
 	try {
 		held.setEnd(node);
 	} catch(e) {
@@ -25,7 +31,7 @@ function addPermanentEdge(node) {
 		return true;
 	}
 
-	if(held.start.type == 'I' && held.end.type != 'I') {
+	if(held.end.type != 'I') {
 		held = null;
 		onDraw();
 		return true;
