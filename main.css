@@ -59,8 +59,7 @@ header > ul > li > a:hover {
 
 #frame {
 	border: 0px solid;
-	min-width: 34%;
-	border-right: 1px solid black;
+	width: 34%;
 	height: 100%;
 	padding: 10px;
 	box-sizing: border-box;
@@ -72,7 +71,7 @@ header > ul > li > a:hover {
 
 #canvas-frame {
 	position: relative;
-	min-width: 66%;
+	width: 66%;
 }
 
 canvas {
@@ -144,4 +143,16 @@ canvas {
 	max-width: 99%;
 	min-height: 200px;
 	max-height: 200px;
+}
+
+/* resizer.js */
+
+[data-rz-handle] {
+    flex: 0 0 5px;
+    background-color: #333;
+}
+
+[data-rz-handle] div {
+    width: 5px;
+    background-color: #333;
 }

@@ -12,6 +12,8 @@ var ctx = canvas.getContext('2d');
 var selfURL = new URL(window.location.href);
 var textURL = selfURL.searchParams.get('url');
 
+var resizer = new Resizer('#wrapper2');
+
 var xhr = new XMLHttpRequest();
 xhr.onreadystatechange = function() {
 	switch(xhr.readyState) {
