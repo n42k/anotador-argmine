@@ -147,6 +147,10 @@ canvas {
 	max-height: 200px;
 }
 
+#edit-node textarea {
+	resize: none;
+}
+
 /* resizer.js */
 
 [data-rz-handle] {
