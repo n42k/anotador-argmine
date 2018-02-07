@@ -279,6 +279,8 @@ function onErase() {
 		edges.splice(i, 1);
 	} else throw "Unsupported held type";
 
+	held = null;
+
 	do {
 		var modified = 0;
 		for(var i = 0; i < nodes.length; ++i) {
