@@ -12,6 +12,8 @@ var dragging = false;
 var drawOffsetX = 0;
 var drawOffsetY = 0;
 
+var action = null;
+
 function getNodeAt(x, y) {
 	for(var i = nodes.length - 1; i != -1; --i)
 		if(nodes[i].isInside(x, y))
@@ -109,7 +111,7 @@ function onPress(x, y, shift) {
 	// if shift is pressed, or the node we have held is the same
 	// as the one we clicked, and we did so within a DOUBLE_CLICK_TIME interval,
 	// begin creating a new edge
-	if(shift || held == node && Date.now() - heldSelectionTime < DOUBLE_CLICK_TIME) {
+	if(shift || held == node && Date.now() - heldSelectionTime < DOUBLE_CLICK_TIME || action == 'new_inference') {
 		if(node == null)
 			return;
 
@@ -165,8 +167,11 @@ function onRelease(x, y, shift) {
 
 	dragging = false;
 
+	var node = getNodeAt(x, y);
+	if(node != null)
+		cancelActions();
+
 	if(held != null && held instanceof Edge) {
-		var node = getNodeAt(x, y);
 		if(addPermanentEdge(node))
 			return;
 		held.delete();
@@ -176,11 +181,13 @@ function onRelease(x, y, shift) {
 }
 
 function onMove(x, y, shift) {
-	x = x - drawOffsetX;
-	y = y - drawOffsetY;
-	
 	if(!dragging)
 		return;
+	
+	cancelActions();
+
+	x = x - drawOffsetX;
+	y = y - drawOffsetY;
 
 	if(held == null) {
 		drawOffsetX = x + heldOffsetX + drawOffsetX;
@@ -191,6 +198,7 @@ function onMove(x, y, shift) {
 }
 
 function onRightClick(x, y, shift) {
+	cancelActions();
 	x = x - drawOffsetX;
 	y = y - drawOffsetY;
 	
@@ -221,6 +229,7 @@ function onRightClick(x, y, shift) {
 }
 
 function onSave() {
+	cancelActions();
 	var jnodes = {};
 
 	var json = {
@@ -327,6 +336,7 @@ function onEditNode(text) {
 }
 
 function onDragText(x, y, text) {
+	cancelActions();
 	clearSelection();
 	if(text == '')
 		return;
@@ -338,4 +348,18 @@ function onDragText(x, y, text) {
 	nodes.push(node);
 	node.hold();
 	onDraw();
+}
+
+function cancelActions() {
+	var button = document.getElementById("newInferenceButton");
+	button.style.backgroundColor = '#fff';
+
+	action = null;
+}
+
+function onNewInference() {
+	var button = document.getElementById("newInferenceButton");
+	button.style.backgroundColor = 'green';
+
+	action = 'new_inference';
 }

@@ -33,7 +33,8 @@ header > ul > li {
 
 header > ul > li > a {
 	display: block;
-	width: 60px;
+	min-width: 60px;
+	width: auto;
 	padding: 10px;
 	text-align: center;
 	text-decoration: none;
