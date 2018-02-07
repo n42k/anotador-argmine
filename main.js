@@ -6,6 +6,9 @@ var heldOffsetX = 0;
 var heldOffsetY = 0;
 var dragging = false;
 
+var drawOffsetX = 0;
+var drawOffsetY = 0;
+
 function getNodeAt(x, y) {
 	for(var i = nodes.length - 1; i != -1; --i)
 		if(nodes[i].isInside(x, y))
@@ -81,13 +84,19 @@ function deleteNode(node) {
 
 function onDraw() {
 	canvas.width = canvas.width;
+	ctx.save();
+	ctx.translate(drawOffsetX, drawOffsetY);
 	for(var i = 0; i < edges.length; ++i)
 		edges[i].draw();
 	for(var i = 0; i < nodes.length; ++i)
 		nodes[i].draw();
+	ctx.restore();
 }
 
 function onPress(x, y, shift) {
+	x = x - drawOffsetX;
+	y = y - drawOffsetY;
+
 	hideContextMenu();
 
 	var node = getNodeAt(x, y);
@@ -133,15 +142,22 @@ function onPress(x, y, shift) {
 	}
 
 	// if we clicked on nothing, unselect the current node
-	if(held == null)
-		return;
+	if(held != null)
+		held.release();
 
-	held.release();
+	// if there's nothing else to click on, we clicked on the background
+	// begin dragging it
+	dragging = true;
+	heldOffsetX = -x;
+	heldOffsetY = -y;
 
 	onDraw();
 }
 
 function onRelease(x, y, shift) {
+	x = x - drawOffsetX;
+	y = y - drawOffsetY;
+
 	dragging = false;
 
 	if(held != null && held instanceof Edge) {
@@ -155,14 +171,24 @@ function onRelease(x, y, shift) {
 }
 
 function onMove(x, y, shift) {
-	if(held == null || !dragging)
+	x = x - drawOffsetX;
+	y = y - drawOffsetY;
+	
+	if(!dragging)
 		return;
 
-	held.move(x + heldOffsetX, y + heldOffsetY);
+	if(held == null) {
+		drawOffsetX = x + heldOffsetX + drawOffsetX;
+		drawOffsetY = y + heldOffsetY + drawOffsetY;
+	} else
+		held.move(x + heldOffsetX, y + heldOffsetY);
 	onDraw();
 }
 
 function onRightClick(x, y, shift) {
+	x = x - drawOffsetX;
+	y = y - drawOffsetY;
+	
 	hideContextMenu();
 
 	var node = getNodeAt(x, y);
