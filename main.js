@@ -216,7 +216,7 @@ function onRightClick(x, y, shift) {
 			held.release();
 
 		edge.hold();
-		showEdgeContextMenu(x, y);
+		showEdgeContextMenu(x + drawOffsetX, y + drawOffsetY);
 		return;
 	}
 
