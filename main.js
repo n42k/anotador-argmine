@@ -167,11 +167,10 @@ function onRelease(x, y, shift) {
 
 	dragging = false;
 
-	var node = getNodeAt(x, y);
-	if(node != null)
-		cancelActions();
+	cancelActions();
 
 	if(held != null && held instanceof Edge) {
+		var node = getNodeAt(x, y);
 		if(addPermanentEdge(node))
 			return;
 		held.delete();
@@ -352,7 +351,7 @@ function onDragText(x, y, text) {
 
 function cancelActions() {
 	var button = document.getElementById("newInferenceButton");
-	button.style.backgroundColor = '#fff';
+	button.style.backgroundColor = '';
 
 	action = null;
 }
