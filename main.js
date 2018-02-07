@@ -1,6 +1,9 @@
 var nodes = [];
 var edges = [];
 
+var DOUBLE_CLICK_TIME = 500; // ms
+
+var heldSelectionTime = 0;
 var held = null;
 var heldOffsetX = 0;
 var heldOffsetY = 0;
@@ -103,9 +106,10 @@ function onPress(x, y, shift) {
 	if(addPermanentEdge(node))
 		return;
 
-	// if shift is pressed, and we're inside a node,
+	// if shift is pressed, or the node we have held is the same
+	// as the one we clicked, and we did so within a DOUBLE_CLICK_TIME interval,
 	// begin creating a new edge
-	if(shift) {
+	if(shift || held == node && Date.now() - heldSelectionTime < DOUBLE_CLICK_TIME) {
 		if(node == null)
 			return;
 
@@ -134,6 +138,7 @@ function onPress(x, y, shift) {
 			held.release();
 
 		node.hold();
+		heldSelectionTime = Date.now();
 		heldOffsetX = node.x - x;
 		heldOffsetY = node.y - y;
 		dragging = true;
