@@ -224,7 +224,7 @@ function onRightClick(x, y, shift) {
 
 	node.hold();
 	onDraw();
-	showNodeContextMenu(x, y);
+	showNodeContextMenu(x + drawOffsetX, y + drawOffsetY);
 }
 
 function onSave() {
