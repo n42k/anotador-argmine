@@ -69,6 +69,7 @@ header > ul > li > a:hover {
 
 #frame > h1 {
 	margin-top: 0px;
+	user-select: none;
 }
 
 #canvas-frame {
