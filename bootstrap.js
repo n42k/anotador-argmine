@@ -11,6 +11,10 @@ var ctx = canvas.getContext('2d');
 
 var selfURL = new URL(window.location.href);
 var textURL = selfURL.searchParams.get('url');
+var proxyURL = selfURL.searchParams.get('proxy');
+
+if(!proxyURL)
+	proxyURL = 'https://cors.io/?';
 
 var resizer = new Resizer('#wrapper2');
 
@@ -28,7 +32,7 @@ xhr.onreadystatechange = function() {
 	}
 }
 
-xhr.open('GET', 'https://cors.io/?' + textURL, true);
+xhr.open('GET', proxyURL + textURL, true);
 xhr.send();
 
 function resizeCanvas() {
