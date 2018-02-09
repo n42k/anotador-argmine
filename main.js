@@ -284,7 +284,7 @@ function onErase() {
 	do {
 		var modified = 0;
 		for(var i = 0; i < nodes.length; ++i) {
-			if(nodes[i].type != 'RA')
+			if(nodes[i].type == 'I')
 				continue;
 
 			var foundStart = false;
