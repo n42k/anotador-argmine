@@ -265,7 +265,7 @@ function onSave() {
 		});
 	}
 
-	prompt('JSON:', JSON.stringify(json));
+	saveJSON(json);
 }
 
 function onErase() {

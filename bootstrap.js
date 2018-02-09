@@ -16,6 +16,11 @@ var proxyURL = selfURL.searchParams.get('proxy');
 if(!proxyURL)
 	proxyURL = 'https://cors.io/?';
 
+var resultsURL = selfURL.searchParams.get('results');
+
+if(!resultsURL)
+	resultsURL = 'results.php';
+
 var resizer = new Resizer('#wrapper2');
 
 var xhr = new XMLHttpRequest();
@@ -138,4 +143,35 @@ function showEdgeContextMenu(x, y) {
 function hideContextMenu() {
 	nodeContextMenu.style.display = 'none';
 	edgeContextMenu.style.display = 'none';
+}
+
+var timeout = null;
+function saveJSON(json) {
+	var button = document.getElementById("saveButton");
+
+	var xhr = new XMLHttpRequest();
+	xhr.onreadystatechange = function() {
+		switch(xhr.readyState) {
+			case XMLHttpRequest.OPENED:
+			case XMLHttpRequest.LOADING:
+				button.style.backgroundColor = '#ff7900';
+				break;
+			case XMLHttpRequest.DONE:
+				if(xhr.responseText == 'success')
+					button.style.backgroundColor = '#4bb543';
+				else
+					button.style.backgroundColor = '#ff0033';
+
+				if(timeout != null)
+					clearTimeout(timeout);
+
+				timeout = setTimeout(function() {
+					button.style.backgroundColor = '';
+				}, 3000);
+				break;
+		}
+	}
+
+	xhr.open('POST', resultsURL, true);
+	xhr.send(JSON.stringify(json));
 }
