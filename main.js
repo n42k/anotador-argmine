@@ -34,7 +34,14 @@ function addPermanentEdge(node) {
 	if(held == null || !(held instanceof Edge) || node == null)
 		return false;
 
-	if(held.start.type != 'I') {
+	var foundBidirectionalEdge = false;
+	for(var i = 0; i < edges.length; ++i) {
+		var e = edges[i];
+		if(e.start == node && e.end == held.start)
+			foundBidirectionalEdge = true;
+	}
+
+	if(held.start.type != 'I' || held.start == node || foundBidirectionalEdge) {
 		held.delete();
 		held.release();
 		onDraw();
@@ -42,17 +49,6 @@ function addPermanentEdge(node) {
 	}
 
 	try {
-		for(var i = 0; i < edges.length; ++i) {
-			var e = edges[i];
-
-			// if we're already connected to this node, in the opposite direction, ignore
-			if(e.start == node && e.end == held.start) {
-				held.delete();
-				held.release();
-				onDraw();
-				return true;
-			}
-		}
 
 		held.setEnd(node);
 	} catch(e) {
