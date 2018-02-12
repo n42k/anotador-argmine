@@ -29,6 +29,11 @@ if(!resultsURL)
 
 var loadURL = selfURL.searchParams.get('load');
 
+var exitURL = selfURL.searchParams.get('exit');
+
+if(!exitURL)
+	exitURL = '../annotations.php';
+
 var resizer = new Resizer('#wrapper2');
 
 var xhr = new XMLHttpRequest();
@@ -173,32 +178,26 @@ function hideContextMenu() {
 }
 
 var timeout = null;
-function saveJSON(json) {
-	var button = document.getElementById("saveButton");
-
+function saveJSON(json, callbackSuccess, callbackLoading) {
 	var xhr = new XMLHttpRequest();
 	xhr.onreadystatechange = function() {
 		switch(xhr.readyState) {
 			case XMLHttpRequest.OPENED:
 			case XMLHttpRequest.LOADING:
-				button.style.backgroundColor = '#ff7900';
+				if(callbackLoading)
+					callbackLoading();
 				break;
 			case XMLHttpRequest.DONE:
-				if(xhr.responseText == 'success')
-					button.style.backgroundColor = '#4bb543';
-				else
-					button.style.backgroundColor = '#ff0033';
-
-				if(timeout != null)
-					clearTimeout(timeout);
-
-				timeout = setTimeout(function() {
-					button.style.backgroundColor = '';
-				}, 3000);
+				if(callbackSuccess)
+					callbackSuccess();
 				break;
 		}
 	}
 
 	xhr.open('POST', resultsURL, true);
 	xhr.send(JSON.stringify(json));
+}
+
+function exit() {
+	window.location.href = exitURL;
 }

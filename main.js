@@ -227,8 +227,7 @@ function onRightClick(x, y, shift) {
 	showNodeContextMenu(x + drawOffsetX, y + drawOffsetY);
 }
 
-function onSave() {
-	cancelActions();
+function getJSON() {
 	var jnodes = {};
 
 	var json = {
@@ -268,7 +267,30 @@ function onSave() {
 		});
 	}
 
-	saveJSON(json);
+	return json;
+}
+
+function onSave() {
+	cancelActions();
+	var json = getJSON();
+
+	var button = document.getElementById("saveButton");
+
+	saveJSON(json, function() {
+		if(xhr.responseText == 'success')
+			button.style.backgroundColor = '#4bb543';
+		else
+			button.style.backgroundColor = '#ff0033';
+
+		if(timeout != null)
+			clearTimeout(timeout);
+
+		timeout = setTimeout(function() {
+			button.style.backgroundColor = '';
+		}, 3000);
+	}, function() {
+		button.style.backgroundColor = '#ff7900';
+	});
 }
 
 function onErase() {
@@ -403,4 +425,13 @@ function onLoad(json) {
 	}
 
 	onDraw();
+}
+
+function onExit() {
+	cancelActions();
+	var json = getJSON();
+
+	saveJSON(json, function() {
+		exit();
+	});
 }
