@@ -42,6 +42,18 @@ function addPermanentEdge(node) {
 	}
 
 	try {
+		for(var i = 0; i < edges.length; ++i) {
+			var e = edges[i];
+
+			// if we're already connected to this node, in the opposite direction, ignore
+			if(e.start == node && e.end == held.start) {
+				held.delete();
+				held.release();
+				onDraw();
+				return true;
+			}
+		}
+
 		held.setEnd(node);
 	} catch(e) {
 		held.delete();
