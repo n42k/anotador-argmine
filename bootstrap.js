@@ -10,7 +10,13 @@ var canvas = document.getElementById('canvas');
 var ctx = canvas.getContext('2d');
 
 var selfURL = new URL(window.location.href);
+
+// get news URL
 var textURL = selfURL.searchParams.get('url');
+
+// get news id
+var newsId = parseInt(textURL.match(/(\d+)(?!.*\d)/)[0]);
+
 var proxyURL = selfURL.searchParams.get('proxy');
 
 if(!proxyURL)

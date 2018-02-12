@@ -233,7 +233,10 @@ function onSave() {
 
 	var json = {
 		nodes: [],
-		edges: []
+		edges: [],
+		metadata: {
+			newsId: newsId
+		}
 	};
 
 	for(var i = 0; i < nodes.length; ++i) {
