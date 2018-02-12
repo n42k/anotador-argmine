@@ -27,6 +27,8 @@ var resultsURL = selfURL.searchParams.get('results');
 if(!resultsURL)
 	resultsURL = 'results.php';
 
+var loadURL = selfURL.searchParams.get('load');
+
 var resizer = new Resizer('#wrapper2');
 
 var xhr = new XMLHttpRequest();
@@ -38,13 +40,32 @@ xhr.onreadystatechange = function() {
 			break;
 		case XMLHttpRequest.DONE:
 			frame.innerHTML = xhr.responseText;
-			init();
+
+			if(loadURL) {
+				load();
+			} else
+				init();
 			break;
 	}
 }
 
 xhr.open('GET', proxyURL + textURL, true);
 xhr.send();
+
+function load() {
+	var xhr = new XMLHttpRequest();
+	xhr.onreadystatechange = function() {
+		switch(xhr.readyState) {
+			case XMLHttpRequest.DONE:
+				var json = JSON.parse(xhr.responseText);
+				init();
+				onLoad(json);
+				break;
+		}
+	}
+	xhr.open('GET', loadURL + '?newsId=' + newsId, true);
+	xhr.send();
+}
 
 function resizeCanvas() {
 	canvas.width = canvas.clientWidth;

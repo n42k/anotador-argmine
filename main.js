@@ -367,3 +367,40 @@ function onNewInference() {
 
 	action = 'new_inference';
 }
+
+function onLoad(json) {
+	var ns = json['nodes'];
+
+	for(var i = 0; i < ns.length; ++i) {
+		var n = ns[i];
+
+		var x = n['x'];
+		var y = n['y'];
+		var type = n['type'];
+		var text = n['text'];
+
+		switch(type) {
+			case 'I':
+				nodes.push(new Node(x, y, text, type));
+				break;
+			case 'RA':
+				nodes.push(new InferenceNode(x, y, InferenceNode.schemes.SUPPORT));
+				break;
+			case 'CA':
+				nodes.push(new InferenceNode(x, y, InferenceNode.schemes.ATTACK));
+				break;
+		}
+	}
+
+	var es = json['edges'];
+
+	for(var i = 0; i < es.length; ++i) {
+		var e = es[i];
+
+		var edge = new Edge(nodes[parseInt(e['from']['id'])]);
+		edge.setEnd(nodes[parseInt(e['to']['id'])]);
+		edges.push(edge);
+	}
+
+	onDraw();
+}
