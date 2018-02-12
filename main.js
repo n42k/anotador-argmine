@@ -286,8 +286,8 @@ function onSave() {
 
 	var button = document.getElementById("saveButton");
 
-	saveJSON(json, function() {
-		if(xhr.responseText == 'success')
+	saveJSON(json, function(success) {
+		if(success)
 			button.style.backgroundColor = '#4bb543';
 		else
 			button.style.backgroundColor = '#ff0033';
@@ -441,7 +441,10 @@ function onExit() {
 	cancelActions();
 	var json = getJSON();
 
-	saveJSON(json, function() {
-		exit();
+	saveJSON(json, function(success) {
+		if(success)
+			exit();
+		else
+			alert('Ocorreu um erro a guardar');
 	});
 }

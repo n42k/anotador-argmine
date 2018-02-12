@@ -189,7 +189,7 @@ function saveJSON(json, callbackSuccess, callbackLoading) {
 				break;
 			case XMLHttpRequest.DONE:
 				if(callbackSuccess)
-					callbackSuccess();
+					callbackSuccess(xhr.responseText == 'success');
 				break;
 		}
 	}
