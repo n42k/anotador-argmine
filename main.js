@@ -56,9 +56,11 @@ function addPermanentEdge(node) {
 		return true;
 	}
 
-	var middleX = (held.start.x + held.end.x)/2;
-	var middleY = (held.start.y + held.end.y)/2;
+	var middleX = (held.start.x + held.start.width + held.end.x)/2;
+	var middleY = (held.start.y + held.start.height + held.end.y)/2;
 	var inference = new InferenceNode(middleX, middleY, InferenceNode.schemes.SUPPORT);
+	inference.x -= inference.width/2;
+	inference.y -= inference.height/2;
 	nodes.push(inference);
 
 	var edge1 = new Edge(held.start);
