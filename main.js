@@ -237,6 +237,13 @@ function onRightClick(x, y, shift) {
 	showNodeContextMenu(x + drawOffsetX, y + drawOffsetY);
 }
 
+// this function is used to give an id to each node, again
+// so that the first node has an id of 0, the second of 1, and so on
+function reIdNodes() {
+	for(var i = 0; i < nodes.length; ++i)
+		nodes[i].id = i;
+}
+
 function getJSON() {
 	var jnodes = {};
 
@@ -247,6 +254,8 @@ function getJSON() {
 			newsId: newsId
 		}
 	};
+
+	reIdNodes();
 
 	for(var i = 0; i < nodes.length; ++i) {
 		var node = nodes[i];
