@@ -35,11 +35,12 @@
 			<div id="edit-node">
 				<header>Editar Proposição</header>
 				<div>
+					<!-- NOTE: to restore old editing behaviour, remove disabled from <textarea> and change onclick handler of 'Gravar' to "bEditNode()" -->
 					<label>Texto: <br>
-						<textarea id="nodeText"></textarea>
+						<textarea id="nodeText" disabled></textarea>
 					</label>
 					<input type="button" value="Cancelar" onclick="bCancel()">
-					<input type="button" value="Gravar" onclick="bEditNode()">
+					<input type="button" value="Gravar" onclick="bCancel()">
 				</div>
 			</div>
 			<div id="edit-inference">
