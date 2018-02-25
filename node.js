@@ -11,6 +11,8 @@ function Node(x, y, text, type) {
 	this.textColor = '#000';
 	this.focused = false;
 	this.scheme = 0;
+
+	this.hasRange = false;
 }
 
 Node.MAX_WIDTH = 200;
@@ -160,6 +162,25 @@ Node.prototype.setType = function(type) {
 		default:
 			console.log('Unknown node type');
 	}
+}
+
+Node.prototype.setRange = function(start, end) {
+	this.start = start;
+	this.end = end;
+	this.hasRange = true;
+}
+
+Node.prototype.isConflicting = function() {
+	for(var i = 0; i < nodes.length; ++i) {
+		var node = nodes[i];
+
+		if(!node.hasRange)
+			continue;
+
+		if(this.end > node.start && node.end > this.start) // 1 axis AABB
+			return true;
+	}
+	return false;
 }
 
 function InferenceNode(x, y, scheme) {

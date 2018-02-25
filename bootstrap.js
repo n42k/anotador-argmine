@@ -81,14 +81,96 @@ function resizeCanvas() {
 
 resizeCanvas();
 
+function getIndicesRelativeTo(range, relativeElement) {
+	function _hasParentNode(parent, child) {
+		if(child == parent)
+			return true;
+
+		if(child == null)
+			return false;
+
+		return _hasParentNode(parent, child.parentNode);
+	}
+
+	function _getLengthTo(parent, child) {
+		function _getLengthToAux(parent, child) {
+			if(parent == child)
+				return {
+					length: 0,
+					found: true
+				};
+
+			if(parent.length)
+				return {
+					length: parent.length,
+					found: false
+				};
+
+			var nodes = parent.childNodes;
+			var found = false;
+			var length = 0;
+
+			for(var i = 0; i < nodes.length; ++i) {
+				var parentChild = nodes[i]; // a child of the parent
+
+				lengthTo = _getLengthToAux(parentChild, child);
+				length += lengthTo.length;
+				if(lengthTo.found) {
+					found = true;
+					break;
+				}
+			}
+
+			return {
+				found: found,
+				length: length
+			}
+		}
+
+		return _getLengthToAux(parent, child).length;
+	}
+
+	if(!_hasParentNode(relativeElement, range.startContainer) ||
+	   !_hasParentNode(relativeElement, range.endContainer))
+		return null;
+
+	var childNodes = relativeElement.childNodes;
+
+	var startLength = _getLengthTo(relativeElement, range.startContainer) + range.startOffset;
+	var endLength = _getLengthTo(relativeElement, range.endContainer) + range.endOffset;
+
+	return {
+		start: startLength,
+		end: endLength
+	}
+}
+
 function getSelected() {
-	return window.getSelection().toString();
+	var selection = window.getSelection();
+
+	if(selection.rangeCount == 0)
+		return null;
+
+	var range = selection.getRangeAt(0);
+	var indices = getIndicesRelativeTo(range, frame);
+
+	var string = selection.toString();
+
+	if(indices == null || string == '')
+		return null;
+
+	return {
+		start: indices.start,
+		end: indices.end,
+		text: selection.toString()
+	};
 }
 
 function clearSelection() {
 	window.getSelection().removeAllRanges();
 }
 
+var dragSelection = null;
 function init() {
 	canvas.addEventListener('mouseup', function(event) {
 		event.preventDefault();
@@ -115,11 +197,11 @@ function init() {
 		onRightClick(event.offsetX, event.offsetY, event.shiftKey);
 	});
 	canvas.addEventListener('dragover', function(event) {
+		dragSelection = getSelected();
 		event.preventDefault();
 	});
 	canvas.addEventListener('drop', function(event) {
-		var text = event.dataTransfer.getData("text/plain");
-		onDragText(event.offsetX, event.offsetY, text);
+		onDragText(event.offsetX, event.offsetY, dragSelection);
 		event.preventDefault();
 	});
 	window.addEventListener('resize', resizeCanvas);

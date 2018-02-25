@@ -136,9 +136,9 @@ function onPress(x, y, shift) {
 	}
 
 	// if there's text selected, add a node
-	var text = getSelected();
-	if(text != '') {
-		onDragText(x, y, text);
+	var selection = getSelected();
+	if(selection != null) {
+		onDragText(x, y, selection);
 		return;
 	}
 
@@ -244,7 +244,8 @@ function getJSON() {
 		nodes: [],
 		edges: [],
 		metadata: {
-			newsId: newsId
+			newsId: newsId,
+			ranges: []
 		}
 	};
 
@@ -266,6 +267,7 @@ function getJSON() {
 		};
 
 		json.nodes.push(jnode);
+		json.metadata.ranges.push(node.hasRange ? [node.start, node.end] : null);
 		jnodes[jnode.id] = jnode;
 	}
 
@@ -372,21 +374,26 @@ function onEditNode(text) {
 	onDraw();
 }
 
-function onDragText(x, y, text) {
+function onDragText(x, y, selection) {
 	clearSelection();
-	if(text == '')
+	if(selection == null)
 		return;
 
 	if(held)
 		held.release();
 
-	var node = new Node(x, y, text, 'I');
-	nodes.push(node);
-	node.hold();
-	onDraw();
+	var node = new Node(x, y, selection.text, 'I');
+	node.setRange(selection.start, selection.end);
+
+	if(!node.isConflicting()) {
+		nodes.push(node);
+		node.hold();
+		onDraw();
+	}
 }
 
 function onLoad(json) {
+	console.log(json);
 	var ns = json['nodes'];
 
 	for(var i = 0; i < ns.length; ++i) {
@@ -408,6 +415,20 @@ function onLoad(json) {
 				nodes.push(new InferenceNode(x, y, InferenceNode.schemes.ATTACK));
 				break;
 		}
+
+		var metadata = json['metadata'];
+		if(!metadata)
+			continue;
+
+		var ranges = metadata['ranges'];
+		if(!ranges)
+			continue;
+
+		var range = ranges[i];
+		if(!range)
+			continue;
+
+		nodes[nodes.length - 1].setRange(range[0], range[1]);
 	}
 
 	var es = json['edges'];
