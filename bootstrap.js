@@ -5,6 +5,7 @@ var fullscreenHider = document.getElementById('fullscreen-hider');
 
 var modalEditInference = document.getElementById('edit-inference');
 var modalEditNode = document.getElementById('edit-node');
+var modalHelp = document.getElementById('help');
 
 var canvas = document.getElementById('canvas');
 var ctx = canvas.getContext('2d');
@@ -151,6 +152,7 @@ function showEditInference(type) {
 function showModal(modal) {
 	modalEditNode.style.display = 'none';
 	modalEditInference.style.display = 'none';
+	modalHelp.style.display = 'none';
 	modal.style.display = 'block';
 	fullscreenHider.style.display = 'flex';
 }

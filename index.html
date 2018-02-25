@@ -9,10 +9,9 @@
 	<body>
 		<div id="wrapper1">
 			<header><h2>Anotador ArgMine</h2><ul>
-				<li><a href="#" onclick="exit()">Descartar</a></li>
-				<li><a href="#" onclick="onExit()">Gravar e Concluir</a></li>
+				<li><a href="#" onclick="onExit()">Sair</a></li>
 				<li><a href="#" onclick="onSave()" id="saveButton">Gravar</a></li>
-				<li><a href="#" onclick="onNewInference()" id="newInferenceButton">Nova Inferência</a></li>
+				<li><a href="#" onclick="onHelp()">Ajuda</a></li>
 			</ul></header>
 			<div id="wrapper2">
 				<div id="frame"></div>
@@ -52,6 +51,18 @@
 					</select></label>
 					<input type="button" value="Cancelar" onclick="bCancel()">
 					<input type="button" value="Gravar" onclick="bEditInference()">
+				</div>
+			</div>
+			<div id="help">
+				<header>Ajuda</header>
+				<div>
+					<h2>Criar um nó</h2>
+					<p>Selecionar o texto e de seguida arrastar o conteúdo para o canvas do lado direito. Uma caixa será criada contendo o texto selecionado.</p>
+					<h2>Criar um edge</h2>
+					<p>Duplo clique no nó de origem, manter clicado o rato, e largar na caixa destino. Uma aresta será criada a apontar do nó de origem para o nó de destino. Também é possível utilizar a tecla shift, arrastando do nó de origim para o nó de destino.</p>
+					<h2>Editar</h2>
+					<p>Para editar uma inferência, basta carregar com o botão direito do rato na caixa respectiva, e selecionar o novo tipo de inferência.</p>
+					<input type="button" value="Fechar" onclick="bCancel()">
 				</div>
 			</div>
 		</div>

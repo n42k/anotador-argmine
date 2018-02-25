@@ -12,8 +12,6 @@ var dragging = false;
 var drawOffsetX = 0;
 var drawOffsetY = 0;
 
-var action = null;
-
 function getNodeAt(x, y) {
 	for(var i = nodes.length - 1; i != -1; --i)
 		if(nodes[i].isInside(x, y))
@@ -121,7 +119,7 @@ function onPress(x, y, shift) {
 	// if shift is pressed, or the node we have held is the same
 	// as the one we clicked, and we did so within a DOUBLE_CLICK_TIME interval,
 	// begin creating a new edge
-	if(shift || held == node && Date.now() - heldSelectionTime < DOUBLE_CLICK_TIME || action == 'new_inference') {
+	if(shift || held == node && Date.now() - heldSelectionTime < DOUBLE_CLICK_TIME) {
 		if(node == null)
 			return;
 
@@ -177,8 +175,6 @@ function onRelease(x, y, shift) {
 
 	dragging = false;
 
-	cancelActions();
-
 	if(held != null && held instanceof Edge) {
 		var node = getNodeAt(x, y);
 		if(addPermanentEdge(node))
@@ -192,8 +188,6 @@ function onRelease(x, y, shift) {
 function onMove(x, y, shift) {
 	if(!dragging)
 		return;
-	
-	cancelActions();
 
 	x = x - drawOffsetX;
 	y = y - drawOffsetY;
@@ -207,7 +201,6 @@ function onMove(x, y, shift) {
 }
 
 function onRightClick(x, y, shift) {
-	cancelActions();
 	x = x - drawOffsetX;
 	y = y - drawOffsetY;
 	
@@ -290,7 +283,6 @@ function getJSON() {
 }
 
 function onSave() {
-	cancelActions();
 	var json = getJSON();
 
 	var button = document.getElementById("saveButton");
@@ -381,7 +373,6 @@ function onEditNode(text) {
 }
 
 function onDragText(x, y, text) {
-	cancelActions();
 	clearSelection();
 	if(text == '')
 		return;
@@ -393,20 +384,6 @@ function onDragText(x, y, text) {
 	nodes.push(node);
 	node.hold();
 	onDraw();
-}
-
-function cancelActions() {
-	var button = document.getElementById("newInferenceButton");
-	button.style.backgroundColor = '';
-
-	action = null;
-}
-
-function onNewInference() {
-	var button = document.getElementById("newInferenceButton");
-	button.style.backgroundColor = 'green';
-
-	action = 'new_inference';
 }
 
 function onLoad(json) {
@@ -447,13 +424,12 @@ function onLoad(json) {
 }
 
 function onExit() {
-	cancelActions();
-	var json = getJSON();
+	var exitConfirmed = confirm('Tem a certeza que pretende sair? Qualquer alteração não guardada será perdida!');
 
-	saveJSON(json, function(success) {
-		if(success)
-			exit();
-		else
-			alert('Ocorreu um erro a guardar');
-	});
+	if(exitConfirmed)
+		exit();
+}
+
+function onHelp() {
+	showModal(modalHelp);
 }
