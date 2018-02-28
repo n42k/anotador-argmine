@@ -20,19 +20,19 @@ var newsId = parseInt(textURL.match(/(\d+)(?!.*\d)/)[0]);
 
 var proxyURL = selfURL.searchParams.get('proxy');
 
-if(!proxyURL)
+if(proxyURL == null)
 	proxyURL = 'https://cors.io/?';
 
 var resultsURL = selfURL.searchParams.get('results');
 
-if(!resultsURL)
+if(resultsURL == null)
 	resultsURL = 'results.php';
 
 var loadURL = selfURL.searchParams.get('load');
 
 var exitURL = selfURL.searchParams.get('exit');
 
-if(!exitURL)
+if(exitURL == null)
 	exitURL = '../annotations.php';
 
 var resizer = new Resizer('#wrapper2');
