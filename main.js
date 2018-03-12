@@ -12,6 +12,8 @@ var dragging = false;
 var drawOffsetX = 0;
 var drawOffsetY = 0;
 
+var changed = false;
+
 function getNodeAt(x, y) {
 	for(var i = nodes.length - 1; i != -1; --i)
 		if(nodes[i].isInside(x, y))
@@ -58,6 +60,7 @@ function addPermanentEdge(node) {
 
 	if(held.end.type != 'I') {
 		held = null;
+		changed = true;
 		onDraw();
 		return true;
 	}
@@ -78,6 +81,7 @@ function addPermanentEdge(node) {
 
 	held.delete();
 	held.release();
+	changed = true;
 	onDraw();
 	return true;
 }
@@ -89,6 +93,7 @@ function deleteNode(node) {
 		return;
 
 	nodes.splice(i, 1);
+	changed = true;
 
 	for(var i = 0; i < edges.length; ++i)
 		if(edges[i].start == node || edges[i].end == node)
@@ -152,6 +157,7 @@ function onPress(x, y, shift) {
 		heldOffsetX = node.x - x;
 		heldOffsetY = node.y - y;
 		dragging = true;
+		changed = true;
 		onDraw();
 		return;
 	}
@@ -197,6 +203,7 @@ function onMove(x, y, shift) {
 		drawOffsetY = y + heldOffsetY + drawOffsetY;
 	} else
 		held.move(x + heldOffsetX, y + heldOffsetY);
+
 	onDraw();
 }
 
@@ -290,8 +297,10 @@ function onSave() {
 	var button = document.getElementById("saveButton");
 
 	saveJSON(json, function(success) {
-		if(success)
+		if(success) {
 			button.style.backgroundColor = '#4bb543';
+			changed = false;
+		}
 		else
 			button.style.backgroundColor = '#ff0033';
 
@@ -307,6 +316,7 @@ function onSave() {
 }
 
 function onErase() {
+	changed = true;
 	if(held instanceof Node)
 		deleteNode(held);
 	else if(held instanceof Edge) {
@@ -355,6 +365,8 @@ function onEdit() {
 }
 
 function onEditInference(type) {
+	changed = true;
+
 	switch(type) {
 		case 'Default Inference':
 			held.setScheme(InferenceNode.schemes.SUPPORT);
@@ -369,6 +381,7 @@ function onEditInference(type) {
 }
 
 function onEditNode(text) {
+	changed = true;
 	held.setText(text);
 	hideModal();
 	onDraw();
@@ -388,12 +401,12 @@ function onDragText(x, y, selection) {
 	if(!node.isConflicting()) {
 		nodes.push(node);
 		node.hold();
+		changed = true;
 		onDraw();
 	}
 }
 
 function onLoad(json) {
-	console.log(json);
 	var ns = json['nodes'];
 
 	for(var i = 0; i < ns.length; ++i) {
@@ -445,7 +458,10 @@ function onLoad(json) {
 }
 
 function onExit() {
-	var exitConfirmed = confirm('Tem a certeza que pretende sair? Qualquer alteração não guardada será perdida!');
+	var exitConfirmed = true; // the exit is confirmed by default
+
+	if(changed) // unless something has changed
+		exitConfirmed = confirm('Tem a certeza que pretende sair? Qualquer alteração não guardada será perdida!');
 
 	if(exitConfirmed)
 		exit();
